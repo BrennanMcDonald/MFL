@@ -14,7 +14,7 @@ func check(e error) {
 
 func main(){
 
-   dat, err := ioutil.ReadFile("MFL.txt")
+   dat, err := ioutil.ReadFile("code.mfl")
    check(err)
 
    var l Lexer
