@@ -26,6 +26,10 @@ func (p *Parser) Found(cFoundType string) bool {
    return p.token.cType == cFoundType
 }
 
+func (p *Parser) FoundOneOf(cFoundTypes []string) bool {
+   return contains(cFoundTypes, p.token.cType)
+}
+
 func (p *Parser) Consume(cFoundType string) {
    if (p.token.cType == cFoundType){
       p.GetToken()
@@ -66,7 +70,14 @@ func (p *Parser) Statement(node ASTNode) {
 }
 
 func (p *Parser) Expression(node ASTNode) {
+   if (p.Found(NUMBER)) {
+      p.numberLiteral(node)
 
+   } else if (p.Found(STRING)){
+
+   } else {
+
+   }
 }
 
 func (p *Parser) printStatement(node ASTNode) {
@@ -89,4 +100,14 @@ func (p *Parser) assignmentStatement(node ASTNode) {
 
    //p.Expression(opNode)
    p.Consume(";")
+}
+
+func (p *Parser) stringLiteral(node ASTNode){
+   node.add(p.token)
+   p.GetToken()
+}
+
+func (p *Parser) numberLiteral(node ASTNode){
+   node.add(p.token)
+   p.GetToken()
 }
