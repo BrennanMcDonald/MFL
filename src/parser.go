@@ -105,8 +105,8 @@ func (p *Parser) Expression(node *ASTNode) {
 func (p *Parser) printStatement(node *ASTNode) {
    statementNode := TokenNode(p.token)
    p.Consume("print")
-   node.addNode(statementNode)
    p.Expression(&statementNode)
+   node.addNode(statementNode)
    p.Consume(";")
 }
 
@@ -118,9 +118,10 @@ func (p *Parser) assignmentStatement(node *ASTNode) {
    p.Consume("=")
 
    opNode.addNode(idNode)
-   node.addNode(opNode)
 
    p.Expression(&opNode)
+   node.addNode(opNode)
+
    p.Consume(";")
 }
 
