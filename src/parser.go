@@ -63,13 +63,13 @@ func (p *Parser) Statement(node ASTNode) {
     * assignmentStatement = identifier "=" expression ";"
     */
    if (p.Found("print")){
-      p.printStatement(node)
+      p.printStatement(&node)
    } else {
-      p.assignmentStatement(node)
+      p.assignmentStatement(&node)
    }
 }
 
-func (p *Parser) Expression(node ASTNode) {
+func (p *Parser) Expression(node *ASTNode) {
    if (p.Found(NUMBER)) {
       p.numberLiteral(node)
       for p.FoundOneOf(p.numberOperator){
@@ -102,15 +102,15 @@ func (p *Parser) Expression(node ASTNode) {
    }
 }
 
-func (p *Parser) printStatement(node ASTNode) {
+func (p *Parser) printStatement(node *ASTNode) {
    statementNode := TokenNode(p.token)
    p.Consume("print")
    node.addNode(statementNode)
-   p.Expression(statementNode)
+   p.Expression(&statementNode)
    p.Consume(";")
 }
 
-func (p *Parser) assignmentStatement(node ASTNode) {
+func (p *Parser) assignmentStatement(node *ASTNode) {
    idNode := TokenNode(p.token)
    p.Consume(IDENTIFIER)
 
@@ -120,11 +120,11 @@ func (p *Parser) assignmentStatement(node ASTNode) {
    opNode.addNode(idNode)
    node.addNode(opNode)
 
-   p.Expression(opNode)
+   p.Expression(&opNode)
    p.Consume(";")
 }
 
-func (p *Parser) stringExpression(node ASTNode){
+func (p *Parser) stringExpression(node *ASTNode){
    if (p.Found(STRING)){
       node.add(p.token)
       p.GetToken()
@@ -145,7 +145,7 @@ func (p *Parser) stringExpression(node ASTNode){
 
 }
 
-func (p *Parser) numberExpression(node ASTNode){
+func (p *Parser) numberExpression(node *ASTNode){
    if (p.Found(NUMBER)){
       p.numberLiteral(node)
    } else {
@@ -159,12 +159,12 @@ func (p *Parser) numberExpression(node ASTNode){
    }
 }
 
-func (p *Parser) stringLiteral(node ASTNode){
+func (p *Parser) stringLiteral(node *ASTNode){
    node.add(p.token)
    p.GetToken()
 }
 
-func (p *Parser) numberLiteral(node ASTNode){
+func (p *Parser) numberLiteral(node *ASTNode){
    node.add(p.token)
    p.GetToken()
 }

@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type ASTNode struct {
    token    Token
    level    int
@@ -28,6 +30,7 @@ func (n *ASTNode) addNode(new_node ASTNode){
 
 func (n ASTNode) String() string{
    s := ""
+   fmt.Println(n.token.String())
    s += n.token.String()
    for _,e := range n.children {
       s += e.String()
