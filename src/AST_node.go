@@ -6,6 +6,17 @@ type ASTNode struct {
    children []ASTNode
 }
 
+func Node() {
+   n := ASTNode{}
+   n.token = Token{"NONE","",0,0}
+}
+
+func TokenNode(token Token) ASTNode {
+   n := ASTNode{}
+   n.token = token
+   return n
+}
+
 func (n *ASTNode) add(t Token){
    new_node := ASTNode{t, n.level, []ASTNode{}}
    n.children = append(n.children, new_node)
@@ -16,8 +27,9 @@ func (n *ASTNode) addNode(new_node ASTNode){
 }
 
 func (n ASTNode) String() string{
-   s String
+   s := ""
    for i := 0; i < n.level; i++ {
       s += "    "
    }
+   return s
 }
