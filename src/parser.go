@@ -125,16 +125,15 @@ func (p *Parser) whileStatement(node *ASTNode){
    p.Consume("{")
 
    for !(p.Found("}")){
-      statementNode := TokenNode(p.token)
-      fmt.Println(statementNode)
+      // TODO: Fix double IDENTIFIER tag
+      statementNode := Node()
       p.Statement(&statementNode)
       body.addNode(statementNode)
-
-      p.GetToken()
+      fmt.Printf("Body:")
+      fmt.Println(p.token)
    }
    headerNode.addNode(body)
    node.addNode(headerNode)
-   fmt.Println(p.token)
 
    p.Consume("}")
 }
