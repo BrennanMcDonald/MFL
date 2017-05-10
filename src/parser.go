@@ -49,23 +49,23 @@ func (p *Parser) Parse(sourceText string) ASTNode{
 
 func (p *Parser) Program() {
    node := ASTNode{}
-   p.Statement(node)
+   p.Statement(&node)
    for !p.Found(EOF) {
-      p.Statement(node)
+      p.Statement(&node)
    }
    p.Consume(EOF)
    p.ast = node
 }
 
-func (p *Parser) Statement(node ASTNode) {
+func (p *Parser) Statement(node *ASTNode) {
    /* statement = printStatement | assignmentStatement
     * printStatement = "print" expression ";"
     * assignmentStatement = identifier "=" expression ";"
     */
    if (p.Found("print")){
-      p.printStatement(&node)
+      p.printStatement(node)
    } else {
-      p.assignmentStatement(&node)
+      p.assignmentStatement(node)
    }
 }
 
