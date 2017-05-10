@@ -18,15 +18,10 @@ func main(){
    check(err)
 
    var l Lexer
+   var p Parser
    l.Initialize(string(dat))
-
-   for {
-      h := l.GetNextToken()
-      fmt.Println(h)
-      if (h.cType == EOF){
-         break;
-      }
-   }
+   ast := p.Parse(string(dat))
+   fmt.Println(ast.String())
 
    // var s Scanner;
    // s.Initialize(string(dat))

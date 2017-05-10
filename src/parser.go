@@ -34,7 +34,7 @@ func (p *Parser) Consume(cFoundType string) {
    if (p.token.cType == cFoundType){
       p.GetToken()
    } else {
-      panic ("Was expecting " + p.token.cType + " but recieved " + cFoundType)
+      panic ("Was expecting " + p.token.cType + " but recieved " + cFoundType + " at " + p.token.String())
    }
 }
 
@@ -72,11 +72,33 @@ func (p *Parser) Statement(node ASTNode) {
 func (p *Parser) Expression(node ASTNode) {
    if (p.Found(NUMBER)) {
       p.numberLiteral(node)
-
+      for p.FoundOneOf(p.numberOperator){
+         node.add(p.token)
+         p.GetToken()
+         p.numberExpression(node)
+      }
    } else if (p.Found(STRING)){
-
+      p.stringLiteral(node)
+      for p.Found("||") {
+         p.GetToken()
+         p.stringExpression(node)
+      }
    } else {
+      node.add(p.token)
+      p.Consume(IDENTIFIER)
 
+      if (p.Found("||")){
+         for (p.Found("||")){
+            p.GetToken()
+            p.stringExpression(node)
+         }
+      } else if (p.FoundOneOf(p.numberOperator)) {
+         for (p.FoundOneOf(p.numberOperator)){
+            node.add(p.token)
+            p.GetToken()
+            p.numberExpression(node)
+         }
+      }
    }
 }
 
@@ -84,7 +106,7 @@ func (p *Parser) printStatement(node ASTNode) {
    statementNode := TokenNode(p.token)
    p.Consume("print")
    node.addNode(statementNode)
-   //p.expression(statementNode)
+   p.Expression(statementNode)
    p.Consume(";")
 }
 
@@ -98,8 +120,43 @@ func (p *Parser) assignmentStatement(node ASTNode) {
    opNode.addNode(idNode)
    node.addNode(opNode)
 
-   //p.Expression(opNode)
+   p.Expression(opNode)
    p.Consume(";")
+}
+
+func (p *Parser) stringExpression(node ASTNode){
+   if (p.Found(STRING)){
+      node.add(p.token)
+      p.GetToken()
+
+      for (p.Found("||")){
+         p.GetToken()
+         p.stringExpression(node)
+      }
+   } else {
+      node.add(p.token)
+      p.Consume(IDENTIFIER)
+   }
+
+   for(p.Found("||")){
+      p.GetToken()
+      p.stringExpression(node)
+   }
+
+}
+
+func (p *Parser) numberExpression(node ASTNode){
+   if (p.Found(NUMBER)){
+      p.numberLiteral(node)
+   } else {
+      node.add(p.token)
+      p.Consume(IDENTIFIER)
+   }
+   for p.FoundOneOf(p.numberOperator){
+      node.add(p.token)
+      p.GetToken()
+      p.numberExpression(node)
+   }
 }
 
 func (p *Parser) stringLiteral(node ASTNode){

@@ -105,7 +105,7 @@ func (l *Lexer) GetNextToken() Token {
 
    if (contains(TwoCharacterSymbols, l.c2)){
       token.Cargo = l.c2
-      token.cType = "Symbol"
+      token.cType = l.c2
       l.GetChar()
       l.GetChar()
       return token;
@@ -113,7 +113,7 @@ func (l *Lexer) GetNextToken() Token {
 
    if (contains(OneCharacterSymbols, l.c1)){
       token.Cargo = l.c1
-      token.cType = "Symbol"
+      token.cType = l.c1
       l.GetChar()
       return token;
    }
@@ -121,7 +121,6 @@ func (l *Lexer) GetNextToken() Token {
       token.Cargo = EOF;
    }
    return token;
-
 }
 
 func (l *Lexer) GetChar() {

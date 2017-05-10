@@ -28,8 +28,10 @@ func (n *ASTNode) addNode(new_node ASTNode){
 
 func (n ASTNode) String() string{
    s := ""
-   for i := 0; i < n.level; i++ {
-      s += "    "
+   s += n.token.String()
+   for _,e := range n.children {
+      s += e.String()
    }
    return s
+
 }
