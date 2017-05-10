@@ -37,7 +37,7 @@ func (p *Parser) Consume(cFoundType string) {
    if (p.token.cType == cFoundType){
       p.GetToken()
    } else {
-      panic ("Was expecting " + p.token.cType + " but recieved " + cFoundType + " at " + p.token.String())
+      panic ("Was expecting " + cFoundType + " but recieved " + p.token.cType + " at " + p.token.String())
    }
 }
 
@@ -68,7 +68,7 @@ func (p *Parser) Statement(node *ASTNode) {
    if (p.Found("print")){
       p.printStatement(node)
    } else if (p.Found("while")){
-      p.forStatement(node)
+      p.whileStatement(node)
    } else {
       p.assignmentStatement(node)
    }
@@ -107,7 +107,7 @@ func (p *Parser) Expression(node *ASTNode) {
    }
 }
 
-func (p *Parser) forStatement(node *ASTNode){
+func (p *Parser) whileStatement(node *ASTNode){
    headerNode := TokenNode(p.token)
    p.Consume("while")
 
@@ -126,13 +126,16 @@ func (p *Parser) forStatement(node *ASTNode){
 
    for !(p.Found("}")){
       statementNode := TokenNode(p.token)
-      fmt.Println(headerNode)
-      p.Statement(&headerNode)
-      body.addNode(headerNode)
+      fmt.Println(statementNode)
+      p.Statement(&statementNode)
+      body.addNode(statementNode)
+
       p.GetToken()
    }
    headerNode.addNode(body)
    node.addNode(headerNode)
+   fmt.Println(p.token)
+
    p.Consume("}")
 }
 

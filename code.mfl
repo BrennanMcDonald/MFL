@@ -22,4 +22,5 @@ print "\n" ;
 
 while i == 10 {
     print "Hello World";
+    print "Hello World";
 }
