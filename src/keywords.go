@@ -7,9 +7,9 @@ var lower_letters = "a b c d e f g h i j k l m n o p q r s t u v w x y z";
 var letters = lower_letters + "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
 var digits = "1 2 3 4 5 6 7 8 9 0"
 
-var Keywords = strings.Split("if then else elif endif while loop endloop print return exit", " ")
+var Keywords = strings.Split("for if then else elif endif while loop endloop print return exit", " ")
 
-var OneCharacterSymbols = strings.Split("= ( ) < > / * + - ! & .  ; "," ")
+var OneCharacterSymbols = strings.Split("= ( ) < > / * + - ! & .  ; { }"," ")
 
 var TwoCharacterSymbols = strings.Split("== <= >= <> != ++ ** -- += -= ||", " ")
 
@@ -27,4 +27,6 @@ var IDENTIFIER = "Identifier"
 var NUMBER = "Number"
 var WHITESPACE = "Whitespace"
 var COMMENT = "Comment"
+var CONDITION = "Condition"
+var BODY = "Body"
 var EOF = "Eof"

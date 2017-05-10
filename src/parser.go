@@ -1,9 +1,12 @@
 package main
 
+import "fmt"
+
 /* BNF for the language
  * program =               statement {statement} EOF.
  * statement =             printStatement | assignmentStatement
  * printStatement =        "print" expression ";"
+ * forStatement =          "while" expression "{" {statement} "}"
  * assignmentStatement =   identifier "=" expression ";"
  * expression =            stringExpression | numberExpression
  * numberExpression =      (numberLiteral | variable) { numberOperator numberExpression }
@@ -64,6 +67,8 @@ func (p *Parser) Statement(node *ASTNode) {
     */
    if (p.Found("print")){
       p.printStatement(node)
+   } else if (p.Found("while")){
+      p.forStatement(node)
    } else {
       p.assignmentStatement(node)
    }
@@ -100,6 +105,35 @@ func (p *Parser) Expression(node *ASTNode) {
          }
       }
    }
+}
+
+func (p *Parser) forStatement(node *ASTNode){
+   headerNode := TokenNode(p.token)
+   p.Consume("while")
+
+   expression := TokenNode(Token{CONDITION,CONDITION,p.token.sLine,p.token.sColumn})
+
+   for !(p.Found("{")){
+      headerNode = TokenNode(p.token)
+      expression.addNode(headerNode)
+      p.GetToken()
+   }
+
+   headerNode.addNode(expression)
+   body := TokenNode(Token{BODY,BODY,p.token.sLine,p.token.sColumn})
+
+   p.Consume("{")
+
+   for !(p.Found("}")){
+      statementNode := TokenNode(p.token)
+      fmt.Println(headerNode)
+      p.Statement(&headerNode)
+      body.addNode(headerNode)
+      p.GetToken()
+   }
+   headerNode.addNode(body)
+   node.addNode(headerNode)
+   p.Consume("}")
 }
 
 func (p *Parser) printStatement(node *ASTNode) {

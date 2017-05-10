@@ -7,9 +7,10 @@ type ASTNode struct {
    children []ASTNode
 }
 
-func Node() {
+func Node() ASTNode {
    n := ASTNode{}
    n.token = Token{"NONE","",0,0}
+   return n
 }
 
 func TokenNode(token Token) ASTNode {
