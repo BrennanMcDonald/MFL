@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 )
 
 func check(e error) {
@@ -12,7 +13,7 @@ func check(e error) {
 }
 
 func main() {
-	dat, err := ioutil.ReadFile("code.mfl")
+	dat, err := ioutil.ReadFile(os.Args[1])
 	check(err)
 
 	// var l Lexer

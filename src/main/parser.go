@@ -79,12 +79,21 @@ func (p *Parser) Statement(node *ASTNode) {
 
 func (p *Parser) Expression(node *ASTNode) {
 	if p.Found(NUMBER) {
-		p.numberLiteral(node)
+		var operator ASTNode
+		leftSide := ASTNode{p.token, node.level, []ASTNode{}}
+		p.GetToken()
+		// p.numberLiteral(node)
 		for p.FoundOneOf(p.numberOperator) {
-			node.add(p.token)
+			operator = ASTNode{p.token, node.level, []ASTNode{}}
+			// node.add(p.token)
 			p.GetToken()
-			p.numberExpression(node)
+			rightSide := ASTNode{p.token, node.level, []ASTNode{}}
+			// p.numberExpression(node)
+			operator.addNode(leftSide)
+			operator.addNode(rightSide)
+			p.GetToken()
 		}
+		node.addNode(operator)
 	} else if p.Found(STRING) {
 		p.stringLiteral(node)
 		for p.Found("||") {
